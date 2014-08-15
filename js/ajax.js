@@ -172,3 +172,28 @@ function post_update(){
 		
 		}
 	}	
+
+
+//load more friends
+function load_more_users(last_id){
+				var xmlhttp;
+			document.getElementById("loading").innerHTML='<center><img src="../images/728.GIF"></center>';
+			document.getElementById("load_user_link").innerHTML='';
+		if (window.XMLHttpRequest){
+		xmlhttp=new XMLHttpRequest();
+		}
+		else{
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			}
+		xmlhttp.open("POST",ABSPATH+"friends/load_more_friends.php",true);
+		xmlhttp.setRequestHeader("content-type","application/x-www-form-urlencoded");
+        xmlhttp.send("last_id="+last_id);
+		xmlhttp.onreadystatechange=function(){
+			if(xmlhttp.readyState==4&&xmlhttp.status==200){
+		document.getElementById("loading").innerHTML="";		
+	    document.getElementById("more_users").innerHTML=document.getElementById("more_users").innerHTML+xmlhttp.responseText;
+		}
+			
+		}	
+	
+	}

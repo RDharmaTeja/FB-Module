@@ -67,31 +67,40 @@ function delete_friend_request($friendship_id){
  $delete=mysqli_query($con,$query);
 	}
 //showing friends	
-function show_non_friends($userid){
+function show_non_friends($userid,$number,$startid){
 	global $con;
 	$count=0;
 	$non_friends=array();
-	$query="SELECT * FROM users";
+	$query="SELECT * FROM users WHERE Id>=".$startid;
 	$check=mysqli_query($con,$query);
 	while($row=mysqli_fetch_array($check)){
+		if($count<$number){
 		if($row['Id']!=$userid){
 			if(!check_friendship($userid,$row['Id'])){
 			$non_friends[$count]=$row['username'];	
 			if(!friend_request_status($row['Id'],$userid)){
 			echo "<div class='row'><div class='medium-2 columns'><img src='".ABSPATH."images/download.jpg' width='40' height='50'>
 		</div><div class='medium-4 columns'><a href='#'>".$non_friends[$count]."</a></div><div class='medium-6 columns' id='".$row['Id']."'>";
-		
+		$count++;
 		if(friend_request_status($userid,$row['Id'])){
 		echo"<button class='button tiny ' disabled><b>Friend Request Sent</b></button>
-			</div></div><br>";	
+			</div></div><br>";
+		$count++;		
 			}
 		else	
 		echo"<button class='button tiny ' onclick=add_friend(".$row['Id'].")><b> + Add Friend</b></button>
 			</div></div><br>";
 		}
 				}
+				
 					}
+		
+					}
+		else break;
 		}
+		if($count==$number){
+		echo "<div id='loading'></div><div id='more_users'></div><div id='load_user_link'><center><b><a href='#' onclick='load_more_users(".$row['Id'].")'>Load More</a></b></center></div>";	
+			}
 	}
 	
 //show current friends
@@ -145,7 +154,7 @@ if (mysqli_errno($con)){
 	}
 
 //all friends
-function user_friends($userid){
+/**function user_friends($userid){
 	global $con;
 	$count=1;
 	$query="SELECT * FROM users";
@@ -159,6 +168,8 @@ function user_friends($userid){
 		}
 		return $friend;
 	}
+	* /
+*/
 //user updates
 function updates($userid,$number){
 global $con;
