@@ -15,26 +15,23 @@ include "../includes/Class.php";
 	var ABSPATH='<?echo ABSPATH;?>';
 	 </script>
 	<script src="../js/ajax.js"></script>
-
-	
 </head>
 
 <body>
 <?
-
-
 $current_user=new CurrentUser;
 if($current_user->login()){
 		  $current_user->username=$_SESSION['username'];
 		  $current_user->userid=$_SESSION['id'];
         include "header.php";
         include "center.php";
-		}
+}
 else
-header("location: /myambition");
+{
+    $location=ABSPATH;
+    header("location: ".$location);
+}
 
 ?>
-	
 </body>
-
 </html>
